@@ -43,7 +43,7 @@ This is a class which help to manage password security inside capistrano. It's h
 To use the manager:
 
  require 'capistrano_recia'
- manager = Capistrano::Password::Manager.new(<file_path>)
+ manager = Capistrano::Password::Manager.new(<file_path>,<crypt_key>)
  # generate pass
  new_pass = manager.generate
  # generate and save

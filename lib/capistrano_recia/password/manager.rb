@@ -8,9 +8,9 @@ class Capistrano::Password::Manager
   
   # constructor must determine the path to the save file.
   # if we need to change the keepass regexp, the second parameter is used for it (default [S]20)
-  def initialize(file_path, keepass = "[S]{20}")
+  def initialize(file_path, crypt_key, keepass = "[S]{20}")
     @file_path = file_path
-    @salt = "recia_password"
+    @salt = crypt_key
     @keepass_regex = keepass
   end
   

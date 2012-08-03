@@ -1,7 +1,7 @@
 Gem::Specification.new do |s| 
   s.name = "capistrano_recia"
   s.description = "RECIA Capistrano Support"
-  s.version = "0.0.2"
+  s.version = "0.0.3"
   s.author = "Esco-lan Team"
   s.email = "team@esco-lan.org"
   s.homepage = "https://github.com/RECIA/capistrano_recia"

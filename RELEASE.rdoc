@@ -7,3 +7,7 @@
 == 0.0.2
 
 * adding password security manager
+
+== 0.0.3
+
+* put crypting key as a parameter of the manager
