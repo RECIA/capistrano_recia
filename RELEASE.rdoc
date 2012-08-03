@@ -1,0 +1,9 @@
+= capistrano_recia version 0.0.1
+
+== 0.0.1
+
+* Creation of the initial release of the gem
+
+== 0.0.2
+
+* adding password security manager

@@ -1,0 +1,64 @@
+= RECIA Capistrano
+
+This gem is used by the recia to implements specific behavior in capistrano. It furnish the following services :
+
+ - parents : call of hosts' parents to execute action on them
+ - filters : filter hosts to execute by its roles
+ - password manager : help to generate password and secure them.
+
+== Parents
+
+The function is to execute command on the parent host of current hosts. To do this, we need the gem "nagios_mklivestatus".
+
+To call the function from a task, we need to call a specific method :
+
+ run_parent(cmd)
+ 
+This will select only the servers' parents containing the guest (select parents which are servers).
+There are some notable informations.
+
+The method works as the standard run, except that the ENV['HOSTS'] are remplaced by their parents.
+The command is replaced by its Capistrano::Command::Script version and the original hosts are ordered by their parents and given to the script.
+If some variables are encountered, a loop is created to go through all guest of each host (parents). 
+
+Those are for functionality purpose if you need to execute command with guest as variables you should use this :
+
+ $PARENT:GUEST$ : variable that will be replaced by the name of the guest (we'll create a loop in script)
+ $PARENT:LOOP:START$ : variable that will be replaced by the start of the loop (if not defined and $PARENT:GUEST$ exists, its automatically placed at the start of the command)
+ $PARENT:LOOP:END$ : variable that will be replaced by the end of the loop (if not defined and $PARENT:GUEST$ exists, its automatically placed at the end of the command)
+
+== Filters
+
+This module is made to filter hosts with the roles in task options. It furnish 2 methods for task to run :
+
+ run_filter_roles(cmd) # the host must match one of the roles (connection SSH)
+ run_telnet_filter_roles(cmd) # the host must match one of the roles (connection Telnet)
+ 
+If hosts does not correspond to the filter, they are removed from the list (with informations display) and the command is executed on the remaining hosts.
+
+== Password manager
+
+This is a class which help to manage password security inside capistrano. It's help to generate password (with save in a crypted file), and check the corruption of this password, plus it can securize all the password through a security automaton
+
+To use the manager:
+
+ require 'capistrano_recia'
+ manager = Capistrano::Password::Manager.new(<file_path>)
+ # generate pass
+ new_pass = manager.generate
+ # generate and save
+ new_pass = manager.generate("key")
+ 
+ # test corruption
+ is_corrupt = manager.is_corrupted? "key"
+ 
+ # corrupt password (giving it to a non authorized person
+ pass = manager.corrupt "key"
+ 
+ # live the password uncorrupted when asking for it
+ pass = manager.live_uncorrupt "key"
+ 
+ # securize all corrupted password
+ # securized_pass is a hash of key => password
+ securized_pass = manager.securize
+ 
